@@ -9,6 +9,8 @@ from torch.autograd import Variable
 from models import DnCNN
 from utils import *
 from skimage.metrics import peak_signal_noise_ratio
+from PIL import Image
+
 
 os.environ["CUDA_DEVICE_ORDER"] = "PCI_BUS_ID"
 os.environ["CUDA_VISIBLE_DEVICES"] = "0"
@@ -16,12 +18,20 @@ os.environ["CUDA_VISIBLE_DEVICES"] = "0"
 parser = argparse.ArgumentParser(description="DnCNN_Test")
 parser.add_argument("--num_of_layers", type=int, default=17, help="Number of total layers")
 parser.add_argument("--logdir", type=str, default="logs/DnCNN-S-50", help='path of log files')
-parser.add_argument("--test_data", type=str, default='FID300', help='test on Set12 or Set68')
+parser.add_argument("--test_data", type=str, default='Dust', help='test on Set12 or Set68')
 parser.add_argument("--test_noiseL", type=float, default=25, help='noise level used on test set')
 opt = parser.parse_args()
 
 def normalize(data):
     return data/255.
+
+def resize_image(input_image_path, target_size):
+    # 이미지 열기
+    image = Image.open(input_image_path)
+    # 이미지 리사이징
+    resized_image = image.resize(target_size, Image.Resampling.LANCZOS)
+    return resized_image
+
 
 def main():
     # Build model
@@ -33,9 +43,11 @@ def main():
     model.eval()
     # load data info
     print('Loading data info ...\n')
-    files_source = glob.glob(os.path.join('data', opt.test_data, '*.jpg')) # 테스트하려는 이미지 포맷으로 수정 
+    files_source = glob.glob(os.path.join('data', opt.test_data, '*.tif')) # 테스트하려는 이미지 포맷으로 수정 
     files_source.sort()
     
+    # (Dust 데이터셋을 위한) 이미지 리사이즈할 목표 크기 .. 다른 데이터셋에는 필요없음
+    target_size = (200, 600)
     
     # process data
     niqe_test_before = 0
@@ -46,8 +58,17 @@ def main():
     
     
     for f in files_source:
+        
+
         # image
-        Img = cv2.imread(f)
+        Img = cv2.imread(f) # shape: (8400, 3889, 3)
+
+        # (Dust 데이터셋을 위한) 이미지 사이즈 조정 코드 추가 .. 다른 데이터셋에는 필요없음
+        Img = resize_image(f, target_size)
+        Img = np.array(Img)
+
+
+
         Img = normalize(np.float32(Img[:,:,0]))
         Img = np.expand_dims(Img, 0)
         Img = np.expand_dims(Img, 1)
