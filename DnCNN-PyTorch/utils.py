@@ -219,7 +219,7 @@ def extract_on_patches(img, patch_size):
 
 def _get_patches_generic(img, patch_size, is_train, stride):
 
-    img = img[0, 0] # 4차원 배열(1, 1, 256, 256)을 2차원으로 변경 
+    # img = img[0, 0] # 4차원 배열(1, 1, 256, 256)을 2차원으로 변경 
     
     h, w = np.shape(img)
     if h < patch_size or w < patch_size:
@@ -269,8 +269,9 @@ def niqe(inputImgData):
     pop_cov = params["pop_cov"]
 
 
-    M, N = inputImgData.shape[2:4] # 2차원으로 가져오려고 수정 (1, 1, 256, 256)
-    
+    # M, N = inputImgData.shape[2:4] # 2차원으로 가져오려고 수정 (1, 1, 256, 256)
+    M, N = inputImgData.shape
+
     # assert C == 1, "niqe called with videos containing %d channels. Please supply only the luminance channel" % (C,)
     assert M > (patch_size*2+1), "niqe called with small frame size, requires > 192x192 resolution video using current training parameters"
     assert N > (patch_size*2+1), "niqe called with small frame size, requires > 192x192 resolution video using current training parameters"

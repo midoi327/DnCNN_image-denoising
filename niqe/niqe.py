@@ -239,7 +239,8 @@ def niqe(inputImgData):
 
 if __name__ == "__main__":
     image_paths = [
-        f'/home/piai/Desktop/miryeong/ResidualLearning/DnCNN-PyTorch/data/Set12/{i:02d}.png' for i in range(1, 13)
+        # f'/home/piai/Desktop/miryeong/ResidualLearning/DnCNN-PyTorch/data/Set12/{i:02d}.png' for i in range(1, 13)
+        '/home/piai/Desktop/miryeong/ResidualLearning/DnCNN-PyTorch/data/Set12/09.png'
     ]
 
     niqe_test = 0
@@ -251,6 +252,7 @@ if __name__ == "__main__":
 
         niqe_score = niqe(dis)
         niqe_test += niqe_score
+        
         print(f'NIQE of TESTIMAGE is: {niqe_score:.3f}')
 
         niqe_test /= len(image_paths)
