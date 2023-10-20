@@ -219,7 +219,7 @@ def extract_on_patches(img, patch_size):
 
 def _get_patches_generic(img, patch_size, is_train, stride):
 
-    # img = img[0, 0] # 4차원 배열(1, 1, 256, 256)을 2차원으로 변경 
+    #img = img[0, 0] # 4차원 배열(1, 1, 256, 256)을 2차원으로 변경 
     
     h, w = np.shape(img)
     if h < patch_size or w < patch_size:

@@ -28,10 +28,11 @@ def Im2Patch(img, win, stride=1):
     return Y.reshape([endc, win, win, TotalPatNum])
 
 def prepare_data(data_path, patch_size, stride, aug_times=1):
+   
     # train
     print('process training data')
     scales = [1, 0.9, 0.8, 0.7]
-    files = glob.glob(os.path.join(data_path, 'train', '*.png'))
+    files = glob.glob(os.path.join(data_path, 'FID300', '*.jpg'))
     files.sort()
     h5f = h5py.File('train.h5', 'w')
     train_num = 0
@@ -56,7 +57,7 @@ def prepare_data(data_path, patch_size, stride, aug_times=1):
     # val
     print('\nprocess validation data')
     files.clear()
-    files = glob.glob(os.path.join(data_path, 'Set12', '*.png'))
+    files = glob.glob(os.path.join(data_path, 'FID300', '*.jpg'))
     files.sort()
     h5f = h5py.File('val.h5', 'w')
     val_num = 0
